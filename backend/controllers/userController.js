@@ -19,15 +19,13 @@ const loginUser = asyncHandler(async (req, res) => {
   // find user
   const userd = await User.findOne({ email });
   if (userd && (await userd.passwordMatch(password))) {
+    const { password, ...userWithoutPassword } = userd.toObject();
     const token = generateToken(userd._id);
     res.status(200).json({
       status: true,
       message: "Login Successfully!",
       token,
-      data: {
-        username: userd.username,
-        email: userd.email,
-      },
+      user: userWithoutPassword,
     });
   } else {
     throw new Error("Invalid Credentials!");
@@ -50,9 +48,18 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 // update and getuser id
-
+const getUser = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const user = await User.findById({ _id });
+  res.status(200).json({
+    status: true,
+    message: "Your Data",
+    user,
+  });
+});
 module.exports = {
   createUser,
   loginUser,
   logoutUser,
+  getUser,
 };

@@ -2,7 +2,16 @@ const Post = require("../models/Post");
 const { asyncHandler } = require("../utils/asyncHandler");
 
 const createPost = asyncHandler(async (req, res) => {
-  const post = await Post.create(req.body);
+  const { _id } = req.user;
+  const image = req.file.filename;
+  console.log(image);
+  const post = await Post.create({
+    title: req.body.title,
+    description: req.body.description,
+    image: image,
+    categories: req.body.categories,
+    postbyuser: _id,
+  });
   res.status(200).json({
     status: true,
     message: "Post Create Successfully",
@@ -10,33 +19,28 @@ const createPost = asyncHandler(async (req, res) => {
   });
 });
 
-const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) throw new Error("Email And Password is Required!");
-  // find user
-  const userd = await User.findOne({ email });
-  if (userd && (await userd.passwordMatch(password))) {
-    const token = generateToken(userd._id);
-    res
-      .cookie("token", token)
-      .status(200)
-      .json({
-        status: true,
-        message: "Login Successfully!",
-        data: {
-          username: userd.username,
-          email: userd.email,
-        },
-      });
-  } else {
-    throw new Error("Invalid Credentials!");
-  }
+const allPostGet = asyncHandler(async (req, res) => {
+  const post = await Post.find().populate("postbyuser").sort("-createdAt");
+  res.status(200).json({
+    status: true,
+    message: "All Post",
+    post,
+  });
+});
+const getOnlyUserPost = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const post = await Post.findOne({ postbyuser: _id });
+  res.status(200).json({
+    status: true,
+    message: "Your Post",
+    post,
+  });
 });
 
 // update and getuser id
 
 module.exports = {
   createPost,
-  loginUser,
+  allPostGet,
+  getOnlyUserPost,
 };
-r;

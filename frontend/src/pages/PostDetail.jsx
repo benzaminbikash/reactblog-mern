@@ -1,46 +1,71 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import Comment from "../components/Comment";
+import { useLocation } from "react-router-dom";
+import moment from "moment";
+import { useSelector } from "react-redux";
+import { useMyDataQuery } from "../redux/Api/UserApi";
 
 function PostDetail() {
+  const state = useSelector((state) => state.token);
+  const location = useLocation();
+  const item = location.state;
+  // user api
+  const { data: UserData } = useMyDataQuery(state?.token);
+  // time
+  const timeDifferenceInHours = moment().diff(moment(item.createdAt), "hours");
+  const timeDifferenceInMinutes = moment().diff(
+    moment(item.createdAt),
+    "minute"
+  );
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+  console.log(UserData);
   return (
     <div className="container mx-auto px-20 py-2">
       {/* title */}
       <div className="flex justify-between items-center py-3">
-        <h1 className="text-2xl font-bold">Artifical Inteligence</h1>
-        <div className="flex gap-4">
-          <MdDelete />
-          <MdEdit />
-        </div>
+        <h1 className="text-2xl font-bold">{item.title}</h1>
+        {UserData?.user._id == item.postbyuser._id && (
+          <div className="flex gap-4">
+            <MdDelete />
+            <MdEdit />
+          </div>
+        )}
       </div>
       {/* user info */}
       <div className=" flex justify-between text-gray-500">
-        <p>Reshma Ghimire</p>
-        <p>2021-23-11</p>
+        <p>@{item.postbyuser.username}</p>
+        <p>
+          {timeDifferenceInHours > 0
+            ? `${timeDifferenceInHours} hrs ago`
+            : `${timeDifferenceInMinutes} mins ago`}
+        </p>
       </div>
       {/* image */}
       <img
         className="py-3 h-[500px] object-cover w-full"
-        src="https://chatai.com/wp-content/uploads/2023/11/tr71123-ai-art.jpeg"
+        src={`http://localhost:8000/postimage/${item.image}`}
         alt="/"
       />
-      <p className="text-sm">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga modi
-        dolorem, pariatur rem itaque optio quaerat facilis voluptatem iusto
-        iure, dolor dolores debitis eligendi doloremque possimus? Fugiat
-        necessitatibus recusandae optio, vitae quo voluptatum incidunt eveniet
-        nostrum. Repudiandae amet illo accusantium, cumque odit adipisci iste,
-        doloremque tenetur voluptate reprehenderit ipsam! Laborum.
-      </p>
+      <p className="text-sm">{item.description}</p>
       {/* categories */}
       <div className="pt-4 flex-col  sm:flex-row flex gap-4 items-center font-bold">
         <p>Categories:</p>
-        <p className="bg-slate-400 px-5 text-sm py-1 rounded-full uppercase">
-          Tech
-        </p>
-        <p className="bg-slate-400 px-5 text-sm py-1 rounded-full uppercase">
-          Ai
-        </p>
+        {item.categories.map((item, index) => {
+          return (
+            <p
+              key={index}
+              className="bg-slate-400 px-5 text-sm py-1 rounded-full uppercase"
+            >
+              {item}
+            </p>
+          );
+        })}
       </div>
       {/* comments */}
       <div className="mt-6">

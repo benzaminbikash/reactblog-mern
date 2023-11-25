@@ -3,27 +3,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../constant/constant";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRegistrationMutation } from "../redux/Api/UserApi";
 function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
+  const [registerApi] = useRegistrationMutation();
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
   };
   const hanldeRegister = async (e) => {
     e.preventDefault();
-
-    const response = await fetch(`${baseUrl}/user/signup`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
-    const result = await response.json();
-    if (result.status === false) {
-      toast(result.message);
+    const response = await registerApi(form);
+    if (
+      response.error &&
+      response.error.data &&
+      response.error.data.status === false
+    ) {
+      toast(response.error.data.message);
     } else {
-      toast(result.message);
+      toast(response.data.message);
       navigate("/login");
     }
   };

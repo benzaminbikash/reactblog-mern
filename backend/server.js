@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { notFound, errorMiddleware } = require("./middleware/errorMiddleware");
 const router = require("./routes/userRoute");
+const postRouter = require("./routes/postRoute");
 
 // middleware
 server.use(cors());
@@ -14,6 +15,10 @@ server.use(morgan("dev"));
 
 // router
 server.use("/api/user", router);
+server.use("/api/post", postRouter);
+
+// for image url
+server.use("/postimage", express.static("uploads"));
 
 // error Middleware
 server.use(notFound);

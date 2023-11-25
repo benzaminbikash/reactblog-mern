@@ -4,25 +4,20 @@ var postScheme = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
       required: true,
     },
-    photo: {
+    image: {
       type: String,
-    },
-    username: {
-      type: String,
-      required: true,
-    },
-    userId: {
-      type: String,
-      required: true,
     },
     categories: {
       type: Array,
+    },
+    postbyuser: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {
