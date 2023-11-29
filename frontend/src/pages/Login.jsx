@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setToken } from "../redux/tokenSlice";
 import { useLoginMutation } from "../redux/Api/UserApi";
@@ -27,10 +26,10 @@ function Login() {
       ) {
         toast(response.error.data.message);
       } else {
-        toast(response.data.message);
         localStorage.setItem("auth", response.data.token);
         dispatch(setToken(response.data.token));
         navigate("/");
+        toast(response.data.message);
       }
     }
   };
@@ -42,10 +41,10 @@ function Login() {
   }, []);
   return (
     <div className="container mx-auto px-25 md:px-20">
-      <h1 className="text-center mt-10 mb-4 text-2xl font-bold">
+      <h1 className="text-center mt-10 mb-4 text-1xl md:text-2xl font-bold">
         Login to your account
       </h1>
-      <form className="w-2/5 mx-auto" onSubmit={hanldeRegister}>
+      <form className="w-2/3 md:w-2/5 mx-auto" onSubmit={hanldeRegister}>
         <input
           id="email"
           onChange={(e) => handleChange(e)}
@@ -68,7 +67,6 @@ function Login() {
           Sign Up
         </Link>
       </div>
-      <ToastContainer limit={1} hideProgressBar={true} autoClose={500} />
     </div>
   );
 }

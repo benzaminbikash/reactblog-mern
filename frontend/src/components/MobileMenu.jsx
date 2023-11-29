@@ -23,10 +23,6 @@ function MobileMenu({ setOpen }) {
         Write
       </Link>
       <hr />
-
-      <Link>My Blogs</Link>
-      <hr />
-
       <button onClick={logoutUser} className="text-start">
         Logout
       </button>

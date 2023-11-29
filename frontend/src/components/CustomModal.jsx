@@ -1,22 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { useAllPostQuery, useCreatePostMutation } from "../redux/Api/PostApi";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-function CreatePost() {
-  const navigate = useNavigate();
-  const [postCreateApi] = useCreatePostMutation();
+
+function CustomModal({ close, blogitem }) {
+  // backdrop-blur-sm
   const [category, setCategory] = useState([]);
   const [cat, setCat] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
-  const { refetch: refetchAllPost } = useAllPostQuery();
   const handleCategory = (e) => {
     e.preventDefault();
     if (!cat) {
-      console.log("gey");
+      console.log("hey");
     } else {
       setCategory([...category, cat]);
       setCat("");
@@ -28,35 +23,23 @@ function CreatePost() {
     newarray.splice(index, 1);
     setCategory(newarray);
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    category.forEach((cat, index) => {
-      formData.append(`categories[${index}]`, cat);
-    });
-    formData.append("image", file);
-    const response = await postCreateApi(formData);
-    if (
-      response.error &&
-      response.error.data &&
-      response.error.data.status === false
-    ) {
-      toast(response.error.data.message);
-    } else {
-      navigate("/");
-      toast(response.data.message);
-      await refetchAllPost();
+  useEffect(() => {
+    if (blogitem) {
+      setTitle(blogitem.title);
+      setDescription(blogitem.description);
+      setFile(blogitem.image);
+      setCategory(blogitem.categories);
     }
+  }, []);
+  const hanldeUpdate = (e) => {
+    e.preventDefault();
+    console.log(title, description, category, file);
   };
-
   return (
-    <div className="container mx-auto px-20 py-2">
-      <div>
-        <p className="text-2xl font-bold py-5 ">Create a blog</p>
-        {/* form */}
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+    <div className="flex items-center justify-center   bg-black/50   fixed inset-0">
+      <div className="bg-black w-1/3 p-10 rounded-lg flex flex-col items-center ">
+        <p className="text-2xl font-bold">Update Blog</p>
+        <form className="flex flex-col gap-4">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -111,12 +94,26 @@ function CreatePost() {
             placeholder="Description"
             className="bg-transparent border-red-500 border-b-2 focus:outline-none  rounded-md px-3 "
           />
-          <button className="bg-red-500 p-2 w-36 rounded-full">Save</button>
+          <div className="mx-auto space-x-5">
+            <button
+              type="button"
+              onClick={hanldeUpdate}
+              className="bg-red-500 px-2 py-1 w-36 rounded-full "
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              onClick={close}
+              className="bg-red-500 px-2 py-1 w-36 rounded-full "
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 }
 
-export default CreatePost;
+export default CustomModal;

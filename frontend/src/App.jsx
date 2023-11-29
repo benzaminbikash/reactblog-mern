@@ -13,6 +13,8 @@ import { useDispatch } from "react-redux";
 import { setToken } from "./redux/tokenSlice";
 import Error from "./pages/Error";
 import PrivateRouter from "./components/PrivateRouter";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,6 +39,7 @@ function App() {
           <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer limit={1} hideProgressBar={true} autoClose={500} />
     </>
   );
 }

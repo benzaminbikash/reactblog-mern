@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { baseUrl } from "../constant/constant";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useRegistrationMutation } from "../redux/Api/UserApi";
 function Register() {
   const navigate = useNavigate();
@@ -13,16 +11,21 @@ function Register() {
   };
   const hanldeRegister = async (e) => {
     e.preventDefault();
-    const response = await registerApi(form);
-    if (
-      response.error &&
-      response.error.data &&
-      response.error.data.status === false
-    ) {
-      toast(response.error.data.message);
+    if (!form.email || !form.password || !form.username) {
+      toast("All field is required.");
     } else {
-      toast(response.data.message);
-      navigate("/login");
+      const response = await registerApi(form);
+      if (
+        response.error &&
+        response.error.data &&
+        response.error.data.status === false
+      ) {
+        toast(response.error.data.message);
+      } else {
+        toast(response.data.message);
+        console.log(response.data.message);
+        navigate("/login");
+      }
     }
   };
   useEffect(() => {
@@ -33,10 +36,10 @@ function Register() {
   }, []);
   return (
     <div className="container mx-auto px-25 md:px-20">
-      <h1 className="text-center mt-10 mb-4 text-2xl font-bold">
+      <h1 className="text-center mt-10 mb-4  text-1xl md:text-2xl  font-bold">
         Create an account
       </h1>
-      <form className="w-2/5 mx-auto" onSubmit={hanldeRegister}>
+      <form className="w-2/3 md:w-2/5 mx-auto" onSubmit={hanldeRegister}>
         <input
           onChange={(e) => handleChange(e)}
           id="username"
@@ -68,7 +71,6 @@ function Register() {
           Login
         </Link>
       </div>
-      <ToastContainer limit={1} hideProgressBar={true} />
     </div>
   );
 }
