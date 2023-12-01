@@ -14,9 +14,13 @@ function Profile() {
         {/* left */}
         <div className="md:w-[70%]">
           <p>My Posts:</p>
-          {mypostData?.post.map((item, index) => {
-            return <MyPost key={index} blog={item} />;
-          })}
+          <div>
+            <div className="">
+              {mypostData?.post.map((item, index) => {
+                return <MyPost key={index} blog={item} />;
+              })}
+            </div>
+          </div>
         </div>
         {/* right */}
         <div className="md:w-[30%] ">

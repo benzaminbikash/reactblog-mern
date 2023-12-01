@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useAllPostQuery, useCreatePostMutation } from "../redux/Api/PostApi";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function CreatePost() {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ function CreatePost() {
   const handleCategory = (e) => {
     e.preventDefault();
     if (!cat) {
-      console.log("gey");
+      toast("Category is empty.");
     } else {
       setCategory([...category, cat]);
       setCat("");
@@ -30,24 +29,28 @@ function CreatePost() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    category.forEach((cat, index) => {
-      formData.append(`categories[${index}]`, cat);
-    });
-    formData.append("image", file);
-    const response = await postCreateApi(formData);
-    if (
-      response.error &&
-      response.error.data &&
-      response.error.data.status === false
-    ) {
-      toast(response.error.data.message);
+    if (!category || !title || !description || !file) {
+      toast("All fields are required.");
     } else {
-      navigate("/");
-      toast(response.data.message);
-      await refetchAllPost();
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      category.forEach((cat, index) => {
+        formData.append(`categories[${index}]`, cat);
+      });
+      formData.append("image", file);
+      const response = await postCreateApi(formData);
+      if (
+        response.error &&
+        response.error.data &&
+        response.error.data.status === false
+      ) {
+        toast(response.error.data.message);
+      } else {
+        navigate("/");
+        toast(response.data.message);
+        await refetchAllPost();
+      }
     }
   };
 
@@ -114,7 +117,6 @@ function CreatePost() {
           <button className="bg-red-500 p-2 w-36 rounded-full">Save</button>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 }

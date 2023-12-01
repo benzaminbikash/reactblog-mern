@@ -40,17 +40,21 @@ const getOnlyUserPost = asyncHandler(async (req, res) => {
 const updatePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   if (req.file) {
-    const post = await Post.findByIdAndUpdate(id, {
-      ...req.body,
-      image: req.file.filename,
-    });
+    const post = await Post.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        image: req.file.filename,
+      },
+      { new: true }
+    );
     res.status(200).json({
       status: true,
       message: "Post Update Successfully",
       post,
     });
   } else {
-    const post = await Post.findByIdAndUpdate(id, req.body);
+    const post = await Post.findByIdAndUpdate(id, req.body, { new: true });
     res.status(200).json({
       status: true,
       message: "Post Update Successfully",

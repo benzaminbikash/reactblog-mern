@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { MdDelete, MdEdit } from "react-icons/md";
 import Comment from "../components/Comment";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { useMyDataQuery } from "../redux/Api/UserApi";
 import CustomModal from "../components/CustomModal";
-import { useAllPostQuery, useDeletePostMutation } from "../redux/Api/PostApi";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function PostDetail() {
-  const navigate = useNavigate();
   const state = useSelector((state) => state.token);
   const location = useLocation();
   const item = location.state;
-  // api
-  const { data: UserData } = useMyDataQuery(state?.token);
-  const { refetch: refetchAllPost } = useAllPostQuery();
   // time
   const timeDifferenceInHours = moment().diff(moment(item?.createdAt), "hours");
   const timeDifferenceInMinutes = moment().diff(
@@ -34,37 +27,14 @@ function PostDetail() {
   const updateDisplayx = () => {
     setDisplay(!display);
   };
-  // for delete:
-  const [deletePost] = useDeletePostMutation();
-  const handleDeletePost = async (id) => {
-    const response = await deletePost(id);
-    console.log(response);
-    if (
-      response.error &&
-      response.error.data &&
-      response.error.data.status === false
-    ) {
-      toast(response.error.data.message);
-    } else {
-      toast("Delete Successfully");
-      navigate("/");
-      await refetchAllPost();
-    }
-  };
   return (
     <>
       <div className="container mx-auto px-20 py-2">
         {/* title */}
         <div className="flex justify-between items-center py-3">
           <h1 className="text-2xl font-bold">{item?.title}</h1>
-          {UserData?.user._id == item?.postbyuser._id && (
-            <div className="flex gap-4">
-              <MdDelete onClick={() => handleDeletePost(item?._id)} />
-              <MdEdit onClick={() => updateDisplayx()} />
-            </div>
-          )}
         </div>
-        {/* user info */}
+        {/* user name */}
         <div className=" flex justify-between text-gray-500">
           <p>@{item?.postbyuser.username}</p>
           <p>
