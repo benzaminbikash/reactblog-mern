@@ -43,7 +43,7 @@ function PostDetail() {
               : `${timeDifferenceInMinutes} mins ago`}
           </p>
         </div>
-        {/* image */}
+        {/*  image */}
         <img
           className="py-3 h-[500px] object-cover w-full"
           src={`http://localhost:8000/postimage/${item?.image}`}

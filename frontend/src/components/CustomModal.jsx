@@ -7,9 +7,7 @@ import {
 } from "../redux/Api/PostApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 function CustomModal({ close, blogitem }) {
-  const navigate = useNavigate();
   const state = useSelector((state) => state.token);
   const [category, setCategory] = useState([]);
   const [cat, setCat] = useState("");
@@ -17,7 +15,8 @@ function CustomModal({ close, blogitem }) {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   // // api
-  const { refetch: fetchAPi, error, data } = useMyPostQuery();
+  const { refetch: fetchAPi } = useMyPostQuery();
+  const { refetch: allPostsApi } = useMyPostQuery();
 
   const handleCategory = (e) => {
     e.preventDefault();
@@ -69,6 +68,7 @@ function CustomModal({ close, blogitem }) {
       if (result.status == true) {
         toast(result.message);
         await fetchAPi();
+        await allPostsApi();
         close();
       }
     } catch (error) {

@@ -3,7 +3,10 @@ import HomePost from "../components/HomePost";
 import { useAllPostQuery } from "../redux/Api/PostApi";
 
 function Home() {
-  const { data: blog } = useAllPostQuery();
+  const { refetch, data: blog } = useAllPostQuery();
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <div className="container mx-auto  px-10 md:px-20 ">
       <div>
