@@ -7,26 +7,21 @@ import CustomModal from "../components/CustomModal";
 import {
   useAddCommentMutation,
   useAllProductCommentsQuery,
-  useUpdateCommentMutation,
 } from "../redux/Api/CommentApi";
 import { useMyDataQuery } from "../redux/Api/UserApi";
-import { toast } from "react-toastify";
+import { formatTimeDifference } from "../constant/constant";
 function PostDetail() {
   const state = useSelector((state) => state.token);
   const location = useLocation();
   const item = location.state;
   // time
-  const timeDifferenceInHours = moment().diff(moment(item?.createdAt), "hours");
-  const timeDifferenceInMinutes = moment().diff(
-    moment(item?.createdAt),
-    "minute"
-  );
-  // useEffect(() => {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: "smooth",
-  //   });
-  // }, []);
+  const formatTime = formatTimeDifference(item?.createdAt);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   // for modal
   const [display, setDisplay] = useState(false);
   const updateDisplayx = () => {
@@ -58,36 +53,28 @@ function PostDetail() {
   };
   // for update comment:
   const [select, setSelect] = useState();
-  console.log("select", select);
   useEffect(() => {
     if (select != null) {
       setComment(select.comment);
     }
   }, [select]);
   const updateHandle = async () => {
-    console.log("comment", comment);
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/comment/update/${select._id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: "Bearer " + state?.token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            comment: comment,
-          }),
-        }
-      );
-      const result = await response.json();
-      await commentRefetch();
-      setSelect();
-      setComment("");
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch(
+      `http://localhost:8000/api/comment/update/${select._id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + state?.token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          comment: comment,
+        }),
+      }
+    );
+    await commentRefetch();
+    setSelect();
+    setComment("");
   };
   return (
     <>
@@ -99,11 +86,7 @@ function PostDetail() {
         {/* user name */}
         <div className=" flex justify-between text-gray-500">
           <p>@{item?.postbyuser.username}</p>
-          <p>
-            {timeDifferenceInHours > 0
-              ? `${timeDifferenceInHours} hrs ago`
-              : `${timeDifferenceInMinutes} mins ago`}
-          </p>
+          <p>{formatTime}</p>
         </div>
         {/*  image */}
         <img

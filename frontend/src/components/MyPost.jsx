@@ -6,13 +6,10 @@ import { MdModeEditOutline } from "react-icons/md";
 import { useDeletePostMutation, useMyPostQuery } from "../redux/Api/PostApi";
 import { toast } from "react-toastify";
 import CustomModal from "./CustomModal";
+import { formatTimeDifference } from "../constant/constant";
 
 function MyPost({ blog }) {
-  const timeDifferenceInHours = moment().diff(moment(blog.createdAt), "hours");
-  const timeDifferenceInMinutes = moment().diff(
-    moment(blog.createdAt),
-    "minute"
-  );
+  const formattedTime = formatTimeDifference(blog?.createdAt);
   const [deleteApi] = useDeletePostMutation();
   const { refetch: allMyPostApi } = useMyPostQuery();
   const deleteHandleing = async (id) => {
@@ -52,11 +49,7 @@ function MyPost({ blog }) {
             </div>
           </div>
           <div className="flex justify-between py-1">
-            <p className="text-gray-500">
-              {timeDifferenceInHours > 0
-                ? `${timeDifferenceInHours} hrs ago`
-                : `${timeDifferenceInMinutes} mins ago`}
-            </p>
+            <p className="text-gray-500">{formattedTime}</p>
           </div>
           <p className="text-sm">{blog.description}</p>
         </div>

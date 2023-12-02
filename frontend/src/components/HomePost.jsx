@@ -1,12 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import moment from "moment";
+
+import { formatTimeDifference } from "../constant/constant";
 function HomePost({ blogs }) {
-  const timeDifferenceInHours = moment().diff(moment(blogs.createdAt), "hours");
-  const timeDifferenceInMinutes = moment().diff(
-    moment(blogs.createdAt),
-    "minute"
-  );
+  const formattedTime = formatTimeDifference(blogs.createdAt);
 
   return (
     <div className="mt-10 flex flex-col md:flex-row  md:gap-7   md:px-0">
@@ -28,9 +25,10 @@ function HomePost({ blogs }) {
         <div className="flex justify-between py-1">
           <p className="text-gray-500">@{blogs.postbyuser.username}</p>
           <p className="text-gray-500">
-            {timeDifferenceInHours > 0
+            {/* {timeDifferenceInHours > 0
               ? `${timeDifferenceInHours} hrs ago`
-              : `${timeDifferenceInMinutes} mins ago`}
+              : `${timeDifferenceInMinutes} mins ago`} */}
+            {formattedTime}
           </p>
         </div>
         <p className="text-sm">{blogs.description}</p>

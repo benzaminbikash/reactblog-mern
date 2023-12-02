@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import {
-  useAllPostQuery,
-  useMyPostQuery,
-  useUpdatePostMutation,
-} from "../redux/Api/PostApi";
+import { useMyPostQuery } from "../redux/Api/PostApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 function CustomModal({ close, blogitem }) {

@@ -1,8 +1,6 @@
 import React from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import moment from "moment";
-import { useMyDataQuery } from "../redux/Api/UserApi";
-import { useSelector } from "react-redux";
 import { useDeleteCommentMutation } from "../redux/Api/CommentApi";
 
 function Comment({ comments, userApi, commentRefetch, setSelect, select }) {
