@@ -7,6 +7,7 @@ const cors = require("cors");
 const { notFound, errorMiddleware } = require("./middleware/errorMiddleware");
 const router = require("./routes/userRoute");
 const postRouter = require("./routes/postRoute");
+const commentRouter = require("./routes/commentRoute");
 
 // middleware
 server.use(cors());
@@ -16,6 +17,7 @@ server.use(morgan("dev"));
 // router
 server.use("/api/user", router);
 server.use("/api/post", postRouter);
+server.use("/api/comment", commentRouter);
 
 // for image url
 server.use("/postimage", express.static("uploads"));

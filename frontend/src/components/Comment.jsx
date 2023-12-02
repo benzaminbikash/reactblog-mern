@@ -1,19 +1,51 @@
 import React from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-function Comment() {
+import moment from "moment";
+import { useMyDataQuery } from "../redux/Api/UserApi";
+import { useSelector } from "react-redux";
+import { useDeleteCommentMutation } from "../redux/Api/CommentApi";
+
+function Comment({ comments, userApi, commentRefetch, setSelect, select }) {
+  // time
+  const timeDifferenceInHours = moment().diff(
+    moment(comments?.createdAt),
+    "hours"
+  );
+  const timeDifferenceInMinutes = moment().diff(
+    moment(comments?.createdAt),
+    "minute"
+  );
+  // api
+  const [deleteApi] = useDeleteCommentMutation();
+  const hanldeDelete = async () => {
+    await deleteApi(comments._id);
+    await commentRefetch();
+  };
+  const checkSelect = (d) => {
+    setSelect(d);
+  };
+
   return (
     <div className="bg-slate-600 rounded-md p-2 mt-2">
       <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-200">
-        <p>@Reshma Ghimire</p>
+        <p>@{comments.userId.username}</p>
         <div className="flex items-center gap-5  text-sm text-gray-200">
-          <p>2021-2-2</p>
+          <p>
+            {timeDifferenceInHours > 0
+              ? `${timeDifferenceInHours} hrs ago`
+              : `${timeDifferenceInMinutes} mins ago`}
+          </p>
           <div className="flex items-center gap-2  text-sm text-gray-200">
-            <MdDelete />
-            <MdEdit />
+            {userApi?._id === comments?.userId._id && (
+              <>
+                <MdEdit onClick={() => checkSelect(comments)} />
+                <MdDelete onClick={hanldeDelete} />
+              </>
+            )}
           </div>
         </div>
       </div>
-      <p>- You are amazing</p>
+      <p>- {comments.comment}</p>
     </div>
   );
 }

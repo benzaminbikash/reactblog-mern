@@ -5,16 +5,14 @@ var commentScheme = new mongoose.Schema(
       type: String,
       required: true,
     },
-    author: {
-      type: String,
-      required: true,
-    },
     postId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
       required: true,
     },
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
   },
