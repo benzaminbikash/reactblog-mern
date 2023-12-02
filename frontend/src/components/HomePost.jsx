@@ -31,7 +31,11 @@ function HomePost({ blogs }) {
             {formattedTime}
           </p>
         </div>
-        <p className="text-sm">{blogs.description}</p>
+        <p className="text-sm">
+          {blogs.description.length > 600
+            ? blogs.description.substring(0, 600) + "..."
+            : blogs.description}
+        </p>
       </div>
     </div>
   );

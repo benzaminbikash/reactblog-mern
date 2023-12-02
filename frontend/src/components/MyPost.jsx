@@ -51,7 +51,12 @@ function MyPost({ blog }) {
           <div className="flex justify-between py-1">
             <p className="text-gray-500">{formattedTime}</p>
           </div>
-          <p className="text-sm">{blog.description}</p>
+          <p className="text-sm">
+            {" "}
+            {blog.description.length > 300
+              ? blog.description.substring(0, 300) + "..."
+              : blog.description}
+          </p>
         </div>
       </div>
       {open && <CustomModal close={handleOpen} blogitem={blog} />}
