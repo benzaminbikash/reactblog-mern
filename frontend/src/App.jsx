@@ -1,6 +1,12 @@
 import "./App.css";
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  redirect,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import Login from "./pages/Login";
@@ -16,7 +22,7 @@ import PrivateRouter from "./components/PrivateRouter";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
-function App() {
+const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const getToken = localStorage.getItem("auth");
@@ -42,6 +48,6 @@ function App() {
       <ToastContainer limit={1} hideProgressBar={true} autoClose={500} />
     </>
   );
-}
+};
 
 export default App;

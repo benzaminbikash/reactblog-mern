@@ -43,13 +43,13 @@ export const postApi = createApi({
       }),
     }),
     // update post
-    updatePost: builder.mutation({
-      query: (id, body) => ({
-        url: `post/update/${id}`,
-        method: "put",
-        body,
-      }),
-    }),
+    // updatePost: builder.mutation({
+    //   query: (id, body) => ({
+    //     url: `post/update/${id}`,
+    //     method: "put",
+    //     body,
+    //   }),
+    // }),
   }),
 });
 export const {

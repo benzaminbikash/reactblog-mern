@@ -58,10 +58,12 @@ function PostDetail() {
       setComment(select.comment);
     }
   }, [select]);
+
   const updateHandle = async () => {
-    const response = await fetch(
-      `http://localhost:8000/api/comment/update/${select._id}`,
-      {
+    if (comment.length === 0) {
+      alert("Your comment is empty!");
+    } else {
+      await fetch(`http://localhost:8000/api/comment/update/${select._id}`, {
         method: "PUT",
         headers: {
           Authorization: "Bearer " + state?.token,
@@ -70,11 +72,11 @@ function PostDetail() {
         body: JSON.stringify({
           comment: comment,
         }),
-      }
-    );
-    await commentRefetch();
-    setSelect();
-    setComment("");
+      });
+      await commentRefetch();
+      setSelect();
+      setComment("");
+    }
   };
   return (
     <>
@@ -135,13 +137,13 @@ function PostDetail() {
         </div>
 
         {/* Write comment */}
-        <div className="my-6  flex  flex-col md:flex-row justify-between">
+        <div className="my-6  flex  flex-col md:flex-row justify-between   ">
           <input
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             type="text"
             placeholder="Write a comment"
-            className="md:w-[72%] bg-transparent border-b-1 border-red-500 px-2 focus:outline-none"
+            className="md:w-[72%] bg-transparent border-b-2 border-white px-2 focus:outline-none "
           />
           {/* when select */}
           {select ? (

@@ -9,6 +9,7 @@ function NavBar() {
   const state = useSelector((state) => state.token);
   const authentication = state?.token;
   const [open, setOpen] = useState(false);
+
   return (
     <div className="bg-black shadow-sm shadow-red-500 py-3">
       {/* left */}

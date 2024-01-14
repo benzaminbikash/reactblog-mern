@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { formatTimeDifference } from "../constant/constant";
+
 function HomePost({ blogs }) {
   const formattedTime = formatTimeDifference(blogs.createdAt);
 

@@ -14,7 +14,7 @@ function MobileMenu({ setOpen }) {
   };
 
   return (
-    <div className="z-20 flex flex-col font-semibold  px-3 py-2 w-32 bg-red-500 absolute right-4 md:right-32 top-12 rounded-md ">
+    <div className="z-20 flex flex-col font-semibold  px-3 py-2 w-32 bg-red-500 absolute right-4 md:right-32 top-12 rounded-md  ">
       <Link to="/profile" onClick={() => setOpen()}>
         Profile
       </Link>
